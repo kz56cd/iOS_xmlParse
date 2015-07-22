@@ -2,7 +2,7 @@
 //  ViewController.swift
 //  XMLParse01
 //
-//  Created by 業務委託スタッフ on 2015/07/22.
+//  Created by msano on 2015/07/22.
 //  Copyright (c) 2015年 msano. All rights reserved.
 //
 
@@ -27,21 +27,18 @@ class ViewController: UIViewController {
         self.getDummyXML()
     }
 
-//    func getDummyJson(completion: (Array<Shop>) -> ()) -> () {
     func getDummyXML() {
         Alamofire
             .request(.GET, DUMMUY_URL ,parameters: nil)
             .response {request, response, data, error in
                 println("API : " + request.URLString)
-                
                 if error != nil {
                     println("error : \(error)")
                 } else { // 正常レスポンス
                     if let data: AnyObject = data {
-//                        println("data : \(data)")
                         self.parseXML(data: data)
                     } else {
-                        println("error : XML parse failure.")
+                        println("error : missing data.")
                     }
                 }
         }
@@ -51,9 +48,27 @@ class ViewController: UIViewController {
         
         var error: NSError?
         if let xmlDoc = AEXMLDocument(xmlData: data as! NSData, error: &error) {
-            // ログ表示
-            self.textArea.text = xmlDoc.xmlString
+            self.textArea.text = xmlDoc.xmlString // ログ表示
+
+            // 最初の個人情報のみパースしてみる
+            var firstRecord = xmlDoc.root["record"]
+            var msg = firstRecord["name"].stringValue + "\n" +
+                      firstRecord["ruby"].stringValue + "\n" +
+                      firstRecord["mail"].stringValue + "\n" +
+                      firstRecord["sex"].stringValue + "\n" +
+                      firstRecord["age"].stringValue + "\n" +
+                      firstRecord["birthday"].stringValue + "\n" +
+                      firstRecord["keitai"].stringValue
+            self.showAlert(msg: msg) // アラート表示
         }
+    }
+    
+    func showAlert(#msg: String) {
+        var ac       = UIAlertController(title: "record(1)", message: msg, preferredStyle: .Alert)
+        let okAction = UIAlertAction(title: "OK", style: .Default) { (action) -> Void in
+        }
+        ac.addAction(okAction)
+        presentViewController(ac, animated: true, completion: nil)
     }
 }
 

@@ -2,7 +2,7 @@
 //  AppDelegate.swift
 //  XMLParse01
 //
-//  Created by 業務委託スタッフ on 2015/07/22.
+//  Created by msano on 2015/07/22.
 //  Copyright (c) 2015年 msano. All rights reserved.
 //
 
