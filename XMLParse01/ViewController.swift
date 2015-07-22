@@ -46,5 +46,14 @@ class ViewController: UIViewController {
                 }
         }
     }
+    
+    func parseXML(#data: AnyObject) {
+        
+        var error: NSError?
+        if let xmlDoc = AEXMLDocument(xmlData: data as! NSData, error: &error) {
+            // ログ表示
+            self.textArea.text = xmlDoc.xmlString
+        }
+    }
 }
 
