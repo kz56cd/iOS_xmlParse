@@ -7,19 +7,44 @@
 //
 
 import UIKit
+import Alamofire
+import AEXML
 
 class ViewController: UIViewController {
 
+    let DUMMUY_URL = "https://dl.dropboxusercontent.com/s/cc185bc4ku12gab/dummy01.xml?dl=0"
+    @IBOutlet weak var textArea: UITextView!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view, typically from a nib.
     }
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
+    }
+    
+    @IBAction func getBtnTapped(sender: AnyObject) {
+        self.getDummyXML()
     }
 
-
+//    func getDummyJson(completion: (Array<Shop>) -> ()) -> () {
+    func getDummyXML() {
+        Alamofire
+            .request(.GET, DUMMUY_URL ,parameters: nil)
+            .response {request, response, data, error in
+                println("API : " + request.URLString)
+                
+                if error != nil {
+                    println("error : \(error)")
+                } else { // 正常レスポンス
+                    if let data: AnyObject = data {
+//                        println("data : \(data)")
+                        self.parseXML(data: data)
+                    } else {
+                        println("error : XML parse failure.")
+                    }
+                }
+        }
+    }
 }
 
